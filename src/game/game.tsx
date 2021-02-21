@@ -1,51 +1,75 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Board } from '../board/board'
 import { SquareTypeArray } from '../square/square';
 import { judgement } from '../judgment';
 import './game.css';
 
-type State = {
+type Squares = {
   squares: SquareTypeArray,
-  xIsNext: boolean
+}
+
+type State = {
+  history: Squares[],
+  xIsNext: boolean,
+  stepNumber: number
 }
 
 export const Game = () => {
   const [state, setState] = useState<State>({
-    squares: Array(9).fill(null),
+    history: [{
+      squares: Array(9).fill(null),
+    }],
     xIsNext: true,
+    stepNumber: 0
   });
 
-  // const handleClick = useCallback((i: number) => {
-  //   const squares = [...state.squares];
-  //   squares[i] = state.xIsNext ? 'X' : 'O';
-  //   setState({
-  //     squares: squares,
-  //     xIsNext: !state.xIsNext,
-  //   });
-  // }, [state.squares, state.xIsNext])
-  const handleClick = (i: number): void => {
-    if (judgement(state.squares) || state.squares[i]) return;
+  const history = state.history;
+  const current = history[state.stepNumber];
 
-    const squares = [...state.squares];
+  const handleClick = (i: number): void => {
+    const squares = [...current.squares];
+
+    if (judgement(squares) || squares[i]) return;
+
     squares[i] = state.xIsNext ? 'X' : 'O';
     setState({
-      squares: squares,
+      history: history.concat([{
+        squares: squares,
+      }]),
       xIsNext: !state.xIsNext,
+      stepNumber: history.length,
     });
   }
+
+  const status = judgement(current.squares) ?? `Next player: ${state.xIsNext ? 'X' : 'O'}`;
+  const jumpTo = (step: number) => (
+    setState({
+      history: history,
+      stepNumber: step,
+      xIsNext: (step % 2) === 0,
+    })
+  );
+
+  const moves = history.map((_, move) => {
+    const desc = move ? 'Go to move #' + move : 'Go to game start';
+    return (
+      <li key={move}>
+        <button onClick={ () => jumpTo(move) }>{ desc }</button>
+      </li>
+    );
+  });
 
   return (
     <div className="game">
       <div className="game-board">
         <Board
-          squares={state.squares}
-          xIsNext={state.xIsNext}
+          squares={ current.squares }
           onClick={ (i: number) => handleClick(i) }
         />
       </div>
       <div className="game-info">
-        <div>{/* status */}</div>
-        <ol>{/* TODO */}</ol>
+        <div>{ status }</div>
+        <ol>{ moves }</ol>
       </div>
     </div>
   );
