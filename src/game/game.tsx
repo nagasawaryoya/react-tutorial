@@ -11,7 +11,7 @@ type Squares = {
 type State = {
   history: Squares[],
   xIsNext: boolean,
-  stepNumber: number
+  stepNumber: number,
 }
 
 export const Game = () => {
@@ -23,10 +23,9 @@ export const Game = () => {
     stepNumber: 0
   });
 
-  const history = state.history;
-  const current = history[state.stepNumber];
-
   const handleClick = (i: number): void => {
+    const history = state.history.slice(0, state.stepNumber + 1);
+    const current = history[history.length - 1];
     const squares = [...current.squares];
 
     if (judgement(squares) || squares[i]) return;
@@ -41,6 +40,8 @@ export const Game = () => {
     });
   }
 
+  const history = state.history;
+  const current = history[state.stepNumber];
   const status = judgement(current.squares) ?? `Next player: ${state.xIsNext ? 'X' : 'O'}`;
   const jumpTo = (step: number) => (
     setState({
@@ -53,7 +54,7 @@ export const Game = () => {
   const moves = history.map((_, move) => {
     const desc = move ? 'Go to move #' + move : 'Go to game start';
     return (
-      <li key={move}>
+      <li key={ move }>
         <button onClick={ () => jumpTo(move) }>{ desc }</button>
       </li>
     );
