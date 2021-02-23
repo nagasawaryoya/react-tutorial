@@ -1,16 +1,19 @@
 import React, { FC } from 'react';
-import { Square, SquareTypeArray } from '../square/square'
+import PropTypes from 'prop-types';
+import { History } from '../game/game';
+import { Square } from '../square/square'
 import './board.css';
 
 type Props = {
-  squares: SquareTypeArray,
+  value: History,
   onClick: (i: number) => void
 }
 
 export const Board: FC<Props> = ({ ...props }) => {
   const renderSquare = (i: number) => (
     <Square
-      value={ props.squares[i] }
+      value={ props.value.squares[i] }
+      current={i === props.value.turn}
       onClick={ () => props.onClick(i) }
     />
   );
@@ -39,5 +42,15 @@ export const Board: FC<Props> = ({ ...props }) => {
 Board.displayName = 'Board';
 
 Board.defaultProps = {
-  squares: Array(9).fill(null),
+  value: {
+    squares: Array(9).fill(null),
+    turn: undefined,
+  }
 };
+
+// Square.propTypes = {
+//   value: {
+//     squares: PropTypes.arrayOf(PropTypes.oneOf(['X', 'O', null])),
+//     turn: PropTypes.number
+//   }
+// };

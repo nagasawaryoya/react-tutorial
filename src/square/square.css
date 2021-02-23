@@ -16,3 +16,7 @@
 .square:focus {
   outline: none;
 }
+
+.current {
+  color: red;
+}

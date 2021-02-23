@@ -5,13 +5,13 @@ import { calculateWinner } from '../calculate/winner';
 import { calculatePosition } from '../calculate/position';
 import './game.css';
 
-type Squares = {
+export type History = {
   squares: SquareTypeArray,
   turn?: number,
 }
 
 type State = {
-  history: Squares[],
+  history: History[],
   xIsNext: boolean,
   stepNumber: number,
 }
@@ -70,7 +70,7 @@ export const Game = () => {
     <div className="game">
       <div className="game-board">
         <Board
-          squares={ current.squares }
+          value={ current }
           onClick={ (i: number) => handleClick(i) }
         />
       </div>
