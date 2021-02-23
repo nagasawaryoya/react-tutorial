@@ -26,6 +26,7 @@ export const Game = () => {
   });
   const [history, setHistory] = useState<History[]>([...state.history]);
   const [moves, setMoves] = useState<JSX.Element[]>([]);
+  const [toggle, setToggle] = useState<'desc' | 'asc'>('desc');
 
   const handleClick = (i: number): void => {
     const stateHistory = state.history.slice(0, state.stepNumber + 1);
@@ -50,33 +51,39 @@ export const Game = () => {
     }))
   }
 
-  const jumpTo = (step: number): void => (
-    setState({
-      history: history,
-      stepNumber: step,
-      xIsNext: (step % 2) === 0,
-    })
-  );
-
-  const toggleMoves = () => setHistory([...history].reverse());
+  const toggleMoves = () => {
+    setToggle(toggle === 'desc' ? 'asc' : 'desc');
+    setHistory([...history].reverse());
+  };
 
   const [current, status, position] = useMemo(() => {
+    const jumpTo = (step: number): void => (
+      setState({
+        history: history,
+        stepNumber: step,
+        xIsNext: (step % 2) === 0,
+      })
+    );
+    const historyMessage = (history: History[], step: number) => {
+      if (toggle === 'desc') {
+        return step ? 'Go to move #' + step : 'Go to game start';
+      }
+      return step ? 'Go to move #' + (history.length - step) : 'Go to game end';
+    };
+
     const stateHistory = state.history;
     const current = stateHistory[state.stepNumber];
     const status = calculateWinner(current.squares) ?? `Next player: ${state.xIsNext ? 'X' : 'O'}`;
     const position = calculatePosition(current.turn);
     setMoves(
-      history.map((_, move) => {
-        const desc = move ? 'Go to move #' + move : 'Go to game start';
-        return (
-          <li key={ move }>
-            <button onClick={ () => jumpTo(move) }>{ desc }</button>
-          </li>
-        );
-      })
+      history.map((_, move) => (
+        <li key={ move }>
+          <button onClick={ () => jumpTo(move) }>{ historyMessage(history, move) }</button>
+        </li>
+      ))
     );
     return [current, status, position];
-  }, [state, history]);
+  }, [state.history, state.stepNumber, state.xIsNext, history, toggle]);
 
   return (
     <div className="game">
