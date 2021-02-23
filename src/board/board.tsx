@@ -12,29 +12,35 @@ type Props = {
 export const Board: FC<Props> = ({ ...props }) => {
   const renderSquare = (i: number) => (
     <Square
+      key={i}
       value={ props.value.squares[i] }
       current={i === props.value.turn}
       onClick={ () => props.onClick(i) }
     />
   );
 
+  const renderRow = ({ row, i }: { row: JSX.Element[], i: number }) => (
+    <div key={i} className="board-row">
+      { row }
+    </div>
+  );
+
+  const createBoard = () => {
+    const boards: JSX.Element[] = [];
+    const row: JSX.Element[] = [];
+    for (let i = 0; i < 9; i++) {
+      row.push(renderSquare(i));
+      if ((i + 1) % 3 === 0) {
+        boards.push(renderRow({ row: [...row], i: i }));
+        row.splice(0);
+      }
+    }
+    return boards;
+  };
+
   return (
     <div>
-      <div className="board-row">
-        { renderSquare(0) }
-        { renderSquare(1) }
-        { renderSquare(2) }
-      </div>
-      <div className="board-row">
-        { renderSquare(3) }
-        { renderSquare(4) }
-        { renderSquare(5) }
-      </div>
-      <div className="board-row">
-        { renderSquare(6) }
-        { renderSquare(7) }
-        { renderSquare(8) }
-      </div>
+      { createBoard() }
     </div>
   );
 }
