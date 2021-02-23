@@ -3,7 +3,7 @@ type Position = {
   row: number;
 }
 
-export const calculatePosition = (turn: number | undefined): Position => {
+export const calculatePosition = (turn?: number): Position => {
   if (turn === undefined) {
     return {
       col: 0,
