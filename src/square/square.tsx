@@ -7,10 +7,10 @@ export type SquareType = 'X' | 'O' | null;
 export type SquareTypeArray = SquareType[];
 
 type Props = {
-  value: SquareType,
-  current: boolean,
-  onClick: () => void
-}
+  value: SquareType;
+  current: boolean;
+  onClick: () => void;
+};
 
 export const Square: FC<Props> = ({ ...props }) => {
   let className = 'square';
@@ -19,8 +19,8 @@ export const Square: FC<Props> = ({ ...props }) => {
   }
 
   return (
-    <button className={className} onClick={ props.onClick }>
-      { props.value }
+    <button className={className} onClick={props.onClick}>
+      {props.value}
     </button>
   );
 };
