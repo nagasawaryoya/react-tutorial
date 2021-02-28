@@ -5,8 +5,9 @@ import { calculateWinner } from '../../calculate/winner';
 import { calculatePosition } from '../../calculate/position';
 import { SQUARE_TYPE } from '../../enums/square-type';
 import { SORT_TYPE } from '../../enums/sort-type';
+import { StringUtil } from '../../utils/string';
+import { MSG_GO_TO_START, MSG_GO_TO_END, MSG_GO_TO_MOVE, MSG_NEXT_PLAYER } from '../../consts/messages';
 import './game.css';
-import { MSG_GO_TO_START, MSG_GO_TO_END } from '../../consts/messages';
 
 export type History = {
   squares: SquareTypeArray;
@@ -75,16 +76,16 @@ export const Game = () => {
       });
     const historyMessage = (history: History[], step: number) => {
       if (toggle === SORT_TYPE.DESC) {
-        return step ? 'Go to move #' + step : MSG_GO_TO_START;
+        return step ? StringUtil.format(MSG_GO_TO_MOVE, [step]) : MSG_GO_TO_START;
       }
-      return step ? 'Go to move #' + (history.length - step) : MSG_GO_TO_END;
+      return step ? StringUtil.format(MSG_GO_TO_MOVE, [history.length - step]) : MSG_GO_TO_END;
     };
 
     const stateHistory = state.history;
     const current = stateHistory[state.stepNumber];
     const position = calculatePosition(current.turn);
     const { status, victory } = calculateWinner(current.squares) ?? {
-      status: `Next player: ${state.xIsNext ? SQUARE_TYPE.X : SQUARE_TYPE.O}`,
+      status: StringUtil.format(MSG_NEXT_PLAYER, state.xIsNext ? [SQUARE_TYPE.X] : [SQUARE_TYPE.O]),
       victory: [],
     };
 

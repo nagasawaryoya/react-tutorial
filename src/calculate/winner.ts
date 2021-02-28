@@ -1,4 +1,6 @@
 import { SquareTypeArray } from '../components/square/square';
+import { StringUtil } from '../utils/string';
+import { MSG_WINNER } from '../consts/messages';
 
 type Winner = {
   status: string;
@@ -21,7 +23,7 @@ export const calculateWinner = (squares: SquareTypeArray): Winner | null => {
     const [a, b, c] = LINES[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return {
-        status: `Winner: ${squares[a]}`,
+        status: StringUtil.format(MSG_WINNER, [squares[a]]),
         victory: [a, b, c],
       };
     }
