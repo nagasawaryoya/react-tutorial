@@ -3,6 +3,8 @@ import { Board } from '../board/board';
 import { SquareTypeArray } from '../square/square';
 import { calculateWinner } from '../calculate/winner';
 import { calculatePosition } from '../calculate/position';
+import { SQUARE_TYPE } from '../enums/square-type';
+import { SORT_TYPE } from '../enums/sort-type';
 import './game.css';
 
 export type History = {
@@ -16,6 +18,8 @@ type State = {
   stepNumber: number;
 };
 
+type SortType = SORT_TYPE.ASC | SORT_TYPE.DESC;
+
 export const Game = () => {
   const [state, setState] = useState<State>({
     history: [
@@ -28,7 +32,7 @@ export const Game = () => {
   });
   const [history, setHistory] = useState<History[]>([...state.history]);
   const [moves, setMoves] = useState<JSX.Element[]>([]);
-  const [toggle, setToggle] = useState<'desc' | 'asc'>('desc');
+  const [toggle, setToggle] = useState<SortType>(SORT_TYPE.DESC);
 
   const handleClick = (i: number): void => {
     const stateHistory = state.history.slice(0, state.stepNumber + 1);
@@ -37,7 +41,7 @@ export const Game = () => {
 
     if (calculateWinner(squares) || squares[i]) return;
 
-    squares[i] = state.xIsNext ? 'X' : 'O';
+    squares[i] = state.xIsNext ? SQUARE_TYPE.X : SQUARE_TYPE.O;
     setState({
       history: history.concat([
         {
@@ -57,7 +61,7 @@ export const Game = () => {
   };
 
   const toggleMoves = () => {
-    setToggle(toggle === 'desc' ? 'asc' : 'desc');
+    setToggle(toggle === SORT_TYPE.DESC ? SORT_TYPE.ASC : SORT_TYPE.DESC);
     setHistory([...history].reverse());
   };
 
@@ -69,7 +73,7 @@ export const Game = () => {
         xIsNext: step % 2 === 0,
       });
     const historyMessage = (history: History[], step: number) => {
-      if (toggle === 'desc') {
+      if (toggle === SORT_TYPE.DESC) {
         return step ? 'Go to move #' + step : 'Go to game start';
       }
       return step ? 'Go to move #' + (history.length - step) : 'Go to game end';
@@ -79,7 +83,7 @@ export const Game = () => {
     const current = stateHistory[state.stepNumber];
     const position = calculatePosition(current.turn);
     const { status, victory } = calculateWinner(current.squares) ?? {
-      status: `Next player: ${state.xIsNext ? 'X' : 'O'}`,
+      status: `Next player: ${state.xIsNext ? SQUARE_TYPE.X : SQUARE_TYPE.O}`,
       victory: [],
     };
 

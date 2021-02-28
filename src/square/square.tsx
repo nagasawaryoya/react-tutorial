@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import PropTypes from 'prop-types';
+import { SQUARE_TYPE } from '../enums/square-type';
 import './square.css';
 
-export type SquareType = 'X' | 'O' | null;
-
+export type SquareType = SQUARE_TYPE.X | SQUARE_TYPE.O | null;
 export type SquareTypeArray = SquareType[];
 
 type Props = {
@@ -38,7 +38,7 @@ Square.defaultProps = {
 };
 
 Square.propTypes = {
-  value: PropTypes.oneOf(['X', 'O', null]),
+  value: PropTypes.oneOf([SQUARE_TYPE.X, SQUARE_TYPE.O, null]),
   current: PropTypes.bool.isRequired,
   victory: PropTypes.bool.isRequired,
 };
