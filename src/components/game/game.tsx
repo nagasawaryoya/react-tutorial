@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { Board } from '../board/board';
 import { SquareTypeArray } from '../square/square';
-import { calculateWinner } from '../calculate/winner';
-import { calculatePosition } from '../calculate/position';
-import { SQUARE_TYPE } from '../enums/square-type';
-import { SORT_TYPE } from '../enums/sort-type';
+import { calculateWinner } from '../../calculate/winner';
+import { calculatePosition } from '../../calculate/position';
+import { SQUARE_TYPE } from '../../enums/square-type';
+import { SORT_TYPE } from '../../enums/sort-type';
 import './game.css';
-import { MSG_GO_TO_START, MSG_GO_TO_END } from '../consts/messages';
+import { MSG_GO_TO_START, MSG_GO_TO_END } from '../../consts/messages';
 
 export type History = {
   squares: SquareTypeArray;

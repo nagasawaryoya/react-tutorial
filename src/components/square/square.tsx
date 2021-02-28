@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import PropTypes from 'prop-types';
-import { SQUARE_TYPE } from '../enums/square-type';
+import { SQUARE_TYPE } from '../../enums/square-type';
 import './square.css';
 
 export type SquareType = SQUARE_TYPE.X | SQUARE_TYPE.O | null;

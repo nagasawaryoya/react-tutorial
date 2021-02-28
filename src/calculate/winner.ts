@@ -1,4 +1,4 @@
-import { SquareTypeArray } from '../square/square';
+import { SquareTypeArray } from '../components/square/square';
 
 type Winner = {
   status: string;
