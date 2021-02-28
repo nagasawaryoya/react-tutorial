@@ -1,5 +1,10 @@
 import { SquareTypeArray } from '../square/square';
 
+type Winner = {
+  status: string;
+  victory: number[];
+};
+
 const LINES = [
   [0, 1, 2],
   [3, 4, 5],
@@ -11,11 +16,14 @@ const LINES = [
   [2, 4, 6],
 ];
 
-export const calculateWinner = (squares: SquareTypeArray): string | null => {
+export const calculateWinner = (squares: SquareTypeArray): Winner | null => {
   for (let i = 0; i < LINES.length; i++) {
     const [a, b, c] = LINES[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return `Winner: ${squares[a]}`;
+      return {
+        status: `Winner: ${squares[a]}`,
+        victory: [a, b, c],
+      };
     }
   }
   return null;

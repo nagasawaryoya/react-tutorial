@@ -20,3 +20,7 @@
 .current {
   color: red;
 }
+
+.victory {
+  background-color: yellow;
+}

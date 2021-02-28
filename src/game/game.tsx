@@ -61,7 +61,7 @@ export const Game = () => {
     setHistory([...history].reverse());
   };
 
-  const [current, status, position] = useMemo(() => {
+  const [current, status, position, victory] = useMemo(() => {
     const jumpTo = (step: number): void =>
       setState({
         history: history,
@@ -77,8 +77,12 @@ export const Game = () => {
 
     const stateHistory = state.history;
     const current = stateHistory[state.stepNumber];
-    const status = calculateWinner(current.squares) ?? `Next player: ${state.xIsNext ? 'X' : 'O'}`;
     const position = calculatePosition(current.turn);
+    const { status, victory } = calculateWinner(current.squares) ?? {
+      status: `Next player: ${state.xIsNext ? 'X' : 'O'}`,
+      victory: [],
+    };
+
     setMoves(
       history.map((_, move) => (
         <li key={move}>
@@ -86,13 +90,13 @@ export const Game = () => {
         </li>
       )),
     );
-    return [current, status, position];
+    return [current, status, position, victory];
   }, [state.history, state.stepNumber, state.xIsNext, history, toggle]);
 
   return (
     <div className="game">
       <div className="game-board">
-        <Board value={current} onClick={(i: number) => handleClick(i)} />
+        <Board value={current} victory={victory} onClick={(i: number) => handleClick(i)} />
       </div>
       <div className="game-info">
         <div>{status}</div>
