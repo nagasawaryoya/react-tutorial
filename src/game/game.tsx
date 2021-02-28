@@ -6,6 +6,7 @@ import { calculatePosition } from '../calculate/position';
 import { SQUARE_TYPE } from '../enums/square-type';
 import { SORT_TYPE } from '../enums/sort-type';
 import './game.css';
+import { MSG_GO_TO_START, MSG_GO_TO_END } from '../consts/messages';
 
 export type History = {
   squares: SquareTypeArray;
@@ -74,9 +75,9 @@ export const Game = () => {
       });
     const historyMessage = (history: History[], step: number) => {
       if (toggle === SORT_TYPE.DESC) {
-        return step ? 'Go to move #' + step : 'Go to game start';
+        return step ? 'Go to move #' + step : MSG_GO_TO_START;
       }
-      return step ? 'Go to move #' + (history.length - step) : 'Go to game end';
+      return step ? 'Go to move #' + (history.length - step) : MSG_GO_TO_END;
     };
 
     const stateHistory = state.history;
